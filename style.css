@@ -1,10 +1,12 @@
-.wrapper {
-
-    width: 100vw;
-
+body {
+    font-family: 'Merienda', cursive;
 }
 
-.wrapper * {
+.container * {
     text-align: center;
     margin: 20px auto;
+}
+
+.title {
+    font-family: 'Eagle Lake', cursive;
 }
