@@ -1,0 +1,10 @@
+.wrapper {
+
+    width: 100vw;
+
+}
+
+.wrapper * {
+    text-align: center;
+    margin: 20px auto;
+}
