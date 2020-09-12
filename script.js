@@ -8,6 +8,11 @@ document.body.onload = startPage.classList.toggle("hideMe");
 document.getElementById("startBtn").addEventListener("click", function() {
 
     // Hides the start page
-    startPage.classList.toggle("hideMe")
+    startPage.classList.toggle("hideMe");
 
-})
+    // Makes timer visible
+    document.getElementById("timer").classList.toggle("hideMe");
+
+});
+
+

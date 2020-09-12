@@ -20,11 +20,13 @@ body {
 }
 
 .title {
+    text-decoration: underline;
     font-family: 'Eagle Lake', cursive;
+    text-shadow: 0px 0px 15px #004444;
+    color:#ffffffdd;
 }
 
 footer {
-
     /* Position */
     position: fixed;
     bottom: 0;
@@ -35,20 +37,18 @@ footer {
 
     /* Appearance */
     background-color: #f5f5f5dd;
-
 }
 
 
 #timer {
     text-align: center;
     margin: 0px auto;
-    display: none;
 }
 
 .hideMe {
     display: none;
 }
 
-.showMe {
-    display: block;
+.salmon {
+    background-color: salmon;
 }
