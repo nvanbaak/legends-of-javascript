@@ -38,7 +38,17 @@ footer {
 
 }
 
+
 #timer {
     text-align: center;
     margin: 0px auto;
+    display: none;
+}
+
+.hideMe {
+    display: none;
+}
+
+.showMe {
+    display: block;
 }
