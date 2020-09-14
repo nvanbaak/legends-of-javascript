@@ -8,6 +8,8 @@ var timeLimit = 75;
 // I'm working on the quizpage we're unhiding that instead
 // // startPage.classList.toggle("hideMe");
 quizPage.classList.toggle("hideMe");
+document.getElementById("timer").classList.toggle("hideMe");
+
 
 // Start button functionality
 document.getElementById("startBtn").addEventListener("click", function() {
@@ -52,9 +54,12 @@ function updateTimeDisplay(timeValue) {
     var timeMinutes = Math.floor( (timeValue - timeSeconds) / 60 )
 
     // if the seconds value is under 10 we need to add another 0 or it looks weird
-    if ( timeSeconds < 10 ) {
+    if ( timeSeconds < 10 && timeSeconds >= 0) {
         timeSeconds = "0" + timeSeconds;
-    } 
+    } else if ( timeSeconds < 0) {
+        // We don't let the clock run negative
+        timeSeconds = "00";
+    }
 
     // Output the values
     document.getElementById("timerOutput").innerText = (timeMinutes + ":" + timeSeconds);
@@ -77,15 +82,18 @@ document.querySelector(".answerList").addEventListener("click", function(event) 
             quizFrame.style.backgroundColor = "#51ff00dd";
         } else {
             quizFrame.style.backgroundColor = "#ff0000dd";
+
+            // Incorrect answers also penalize the timer, so we do that here
+            timeLimit -= 10;
+            updateTimeDisplay(timeLimit);
         }
 
         // Once we have the new background color, slowly transition back
-            setTimeout(function () {
-                quizFrame.style = "transition: background-color 500ms";
-                quizFrame.style.backgroundColor = "#f5f5f5dd";
-            }, 100);        
+        setTimeout(function () {
+            quizFrame.style = "transition: background-color 500ms";
+            quizFrame.style.backgroundColor = "#f5f5f5dd";
+        }, 100);        
     }
-
 });
 
 
