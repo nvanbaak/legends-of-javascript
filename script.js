@@ -58,8 +58,42 @@ function updateTimeDisplay(timeValue) {
 
     // Output the values
     document.getElementById("timerOutput").innerText = (timeMinutes + ":" + timeSeconds);
-
 }
+
+// Background animates based on answer clicked
+document.querySelector(".answerList").addEventListener("click", function(event) {
+    event.stopPropagation();
+
+    var quizFrame = document.querySelector(".container");
+
+    // We ignore everything that isn't one of our answers
+    if (event.target.matches("p")) {
+
+        // Set transition speed to 0 so the background changes instantly
+        quizFrame.style = "transition: background-color 0ms";
+
+        // The correct answer turns the background green; otherwise red
+        if ( event.target.classList.value.indexOf("correct") > -1 ) {
+            quizFrame.style.backgroundColor = "#51ff00dd";
+        } else {
+            quizFrame.style.backgroundColor = "#ff0000dd";
+        }
+
+        // Once we have the new background color, slowly transition back
+            setTimeout(function () {
+                quizFrame.style = "transition: background-color 500ms";
+                quizFrame.style.backgroundColor = "#f5f5f5dd";
+            }, 100);        
+    }
+
+});
+
+
+
+
+
+
+
 
 
 function displayQuestion(ques) {
