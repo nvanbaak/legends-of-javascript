@@ -1,9 +1,13 @@
 // Declare global variables
 var startPage = document.getElementById("startPage");
+var quizPage = document.getElementById("quizPage");
 var timeLimit = 75;
 
-// When the document loads, we unhide the start page
-document.body.onload = startPage.classList.toggle("hideMe");
+
+// Eventually we'll just unhide the start page, but while
+// I'm working on the quizpage we're unhiding that instead
+// // startPage.classList.toggle("hideMe");
+quizPage.classList.toggle("hideMe");
 
 // Start button functionality
 document.getElementById("startBtn").addEventListener("click", function() {
@@ -13,7 +17,7 @@ document.getElementById("startBtn").addEventListener("click", function() {
 
     // Make timer and quizPage visible
     document.getElementById("timer").classList.toggle("hideMe");
-    document.getElementById("quizPage").classList.toggle("hideMe");
+    quiPage.classList.toggle("hideMe");
 
     // Start the timer
     var timer = setInterval(function() {
@@ -32,7 +36,7 @@ document.getElementById("startBtn").addEventListener("click", function() {
             document.getElementById("timer").style.color = "red";
 
             // Then move to Game Over page
-            document.getElementById("quizPage").classList.toggle("hideMe");
+            quizPage.classList.toggle("hideMe");
             document.getElementById("endPage").classList.toggle("hideMe");
         }
     }, 1000);

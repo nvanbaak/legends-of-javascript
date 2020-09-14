@@ -4,6 +4,8 @@ body {
 
     background-image: url(/Assets/da_nuie_basin_by_antonkurbatov_dca21j1.png);
     background-color: rgb(0, 68, 48);
+
+    box-sizing: border-box;
 }
 
 .container {
@@ -38,11 +40,63 @@ body {
 }
 
 .answerList {
-    margin-left: 30%;
+    margin: 0px 30%;
+    text-align: left;
+    /* background-color: lightgrey; */
+    padding: 0px 10px;
+    border-radius: 10px;
+    width: 100%;
 }
 
-.answerList * {
-    text-align: left!important;
+.answer {
+    border-radius: 5px;
+    padding: 2px 2px;
+    text-decoration: none;
+    color: black;
+    line-height: 200%;
+    background-color: lightgrey;
+    border: 1px solid black;
+    width: 100%;
+}
+
+
+.answer:hover {
+
+    text-decoration: none;
+    background-color: black;
+    border: 1px solid chartreuse;
+    color: chartreuse;
+    width: 100%;
+    animation: answerfadein;
+    animation-duration: 400ms;
+}
+
+@keyframes answerfadein {
+    from {
+        background-color: lightgrey;
+        border: 1px solid black;
+        color: black;
+    } to {
+        background-color: black;
+        border: 1px solid chartreuse;
+        color: chartreuse;
+    }
+}
+
+@keyframes wrongAnswer {
+    from {
+        background-color: #ff0000;
+    } to {
+        background-color: #f5f5f5dd;
+    }
+}
+
+@keyframes rightAnswer {
+    from {
+        background-color: #51ff00dd;
+    } to {
+        background-color: #f5f5f5dd;
+    }
 }
 
 
