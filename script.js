@@ -5,13 +5,13 @@ var timeLimit = 75;
 // When the document loads, we unhide the start page
 document.body.onload = startPage.classList.toggle("hideMe");
 
-// DStart button functionality
+// Start button functionality
 document.getElementById("startBtn").addEventListener("click", function() {
 
-    // Hides the start page
+    // Hide the start page
     startPage.classList.toggle("hideMe");
 
-    // Makes timer visible
+    // Make timer visible
     document.getElementById("timer").classList.toggle("hideMe");
 
     // Start the timer
@@ -26,10 +26,14 @@ document.getElementById("startBtn").addEventListener("click", function() {
 
         } else {
 
-            // Otherwise stop the clock and move to Game Over
+            // Otherwise stop the clock and turn the timer red
             clearInterval(timer);
+
+
+            // Then move to Game Over page
+            document.getElementById("endPage").classList.toggle("hideMe");
         }
-    }, 1000);
+    }, 100);
 
 });
 
