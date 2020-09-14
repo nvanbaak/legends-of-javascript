@@ -11,8 +11,9 @@ document.getElementById("startBtn").addEventListener("click", function() {
     // Hide the start page
     startPage.classList.toggle("hideMe");
 
-    // Make timer visible
+    // Make timer and quizPage visible
     document.getElementById("timer").classList.toggle("hideMe");
+    document.getElementById("quizPage").classList.toggle("hideMe");
 
     // Start the timer
     var timer = setInterval(function() {
@@ -28,15 +29,15 @@ document.getElementById("startBtn").addEventListener("click", function() {
 
             // Otherwise stop the clock and turn the timer red
             clearInterval(timer);
-
+            document.getElementById("timer").style.color = "red";
 
             // Then move to Game Over page
+            document.getElementById("quizPage").classList.toggle("hideMe");
             document.getElementById("endPage").classList.toggle("hideMe");
         }
-    }, 100);
+    }, 1000);
 
 });
-
 
 function updateTimeDisplay(timeValue) {
     // This function takes a time value in seconds and outputs it to the timer display
@@ -57,4 +58,12 @@ function updateTimeDisplay(timeValue) {
 }
 
 
+function displayQuestion(ques) {
+    // This function takes a question object and dynamically constructs it on the page
+}
 
+// Question objects have a prompt and an array of four answers.  The corrent answer is always first in the array.
+var question1 = {
+    prompt:"Do you oppose the robotic overlords?",
+    answers:["No","Of course","With my life!","I'm not sure"]
+}

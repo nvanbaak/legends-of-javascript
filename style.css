@@ -37,6 +37,15 @@ body {
     font-style: italic;
 }
 
+.answerList {
+    margin-left: 30%;
+}
+
+.answerList * {
+    text-align: left!important;
+}
+
+
 footer {
     /* Position */
     position: fixed;
