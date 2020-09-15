@@ -2,7 +2,7 @@ body {
     /* Font settings */
     font-family: 'Merienda', cursive;
 
-    background-image: url(/Assets/da_nuie_basin_by_antonkurbatov_dca21j1.png);
+    background-image: url(./Assets/da_nuie_basin_by_antonkurbatov_dca21j1.png);
     background-color: rgb(0, 68, 48);
 
     box-sizing: border-box;
