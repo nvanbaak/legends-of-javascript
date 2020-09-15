@@ -1,10 +1,11 @@
 // Declare global variables
 var startPage = document.getElementById("startPage");
 var quizPage = document.getElementById("quizPage");
+var endPage = document.getElementById("endPage");
 var timeLimit = 75;
 var gameOver = false;
 
-// Question objects have a prompt and an array of four answers.  The corrent answer is always first in the array.
+// Question objects have a prompt and an array of four answers.  The correct answer is always first in the array.
 var question1 = {
     prompt:"Do you oppose the robotic overlords?",
     answers:["No","Of course","With my life!","I'm not sure"]
@@ -15,17 +16,15 @@ var question2 = {
     answers:["Anything for you, robotic overlords","I don't know where that is","Death to robots!","I can't read"]
 }
 
-// Eventually we'll just unhide the start page, but while
-// I'm working on the quizpage we're unhiding that instead
-
-// startPage.classList.toggle("hideMe");
-quizPage.classList.toggle("hideMe");
-document.getElementById("timer").classList.toggle("hideMe");
-displayQuestion(question1);
+// Create an array of questions in random order
+var qArray = randomizeArray([question1, question2]);
+var qCount = 0;
 
 
-
-
+startPage.classList.toggle("hideMe");
+// quizPage.classList.toggle("hideMe");
+// document.getElementById("timer").classList.toggle("hideMe");
+// displayQuestion(question1);
 
 // Start button functionality
 document.getElementById("startBtn").addEventListener("click", function() {
@@ -35,7 +34,10 @@ document.getElementById("startBtn").addEventListener("click", function() {
 
     // Make timer and quizPage visible
     document.getElementById("timer").classList.toggle("hideMe");
-    quiPage.classList.toggle("hideMe");
+    quizPage.classList.toggle("hideMe");
+
+    // Then we display the first question in the array
+    displayQuestion(qArray[qCount]);
 
     // Start the timer
     var timer = setInterval(function() {
@@ -53,9 +55,11 @@ document.getElementById("startBtn").addEventListener("click", function() {
             clearInterval(timer);
             document.getElementById("timer").style.color = "red";
 
-            // Then move to Game Over page
-            quizPage.classList.toggle("hideMe");
-            document.getElementById("endPage").classList.toggle("hideMe");
+            // endGame() trips the gameOver flag if it's called somewhere else, so we only need to call it if gameOVer is false
+            if ( !gameOver ) {
+                endGame();
+            }
+
         }
     }, 1000);
 
@@ -80,7 +84,6 @@ function updateTimeDisplay(timeValue) {
     // Output the values
     document.getElementById("timerOutput").innerText = (timeMinutes + ":" + timeSeconds);
 }
-
 
 function randomizeArray(inputArray) {
 
@@ -195,6 +198,12 @@ function displayQuestion(ques) {
         // We ignore everything that isn't one of our answers
         if (event.target.matches("p")) {
 
+            // =============================
+            // RIGHT / WRONG ANIMATION
+            // =============================
+
+            // We flash the background green or red depending on answer
+
             // Set transition speed to 0 so the background changes instantly
             quizFrame.style = "transition: background-color 0ms";
 
@@ -207,18 +216,37 @@ function displayQuestion(ques) {
                 // Incorrect answers also penalize the timer, so we do that here
                 timeLimit -= 10;
                 updateTimeDisplay(timeLimit);
+
+                // if the penalty drops us below 0, we end the game
+                if (timeLimit <= 0) {
+                    endGame();
+                    return;
+                }
             }
 
             // Once we have the new background color, slowly transition back
+            // Execute after short delay because there was weird behavior when we did it instantly
             setTimeout(function () {
                 quizFrame.style = "transition: background-color 500ms";
                 quizFrame.style.backgroundColor = "#f5f5f5dd";
-            }, 100);  
+            }, 100);
+
+            // ===========================
+            // WRAP UP QUESTION
+            // ===========================
             
-            // The question is done, so let's delete the page
-            clearQuizPage();
-            // Then we construct the next question
-            displayQuestion(question2);
+            // The question is done, so move on to the next
+            qCount++;
+
+            // Check if we're done
+            if ( qCount < qArray.length ) {
+                // If not, clear the page and display the next question
+                clearQuizPage();
+                displayQuestion(qArray[qCount]);
+            } else {
+                // If so, end the game
+                endGame();
+            }
         }
     });
 }
@@ -235,14 +263,18 @@ function clearQuizPage() {
     }
 }
 
-document.getElementById("clearBtn").addEventListener("click", function(ev) {
-    console.log(ev);
+function endGame() {
+    // This function ends the game and moves the player to the gameOver screen
+
+    // trip the gameOver flag so the timer knows to stop
+    gameOver = true;
+
+    // This function is only called in the quiz page, so we clear that
     clearQuizPage();
-});
 
-
-
-
+    // Finally, make the gameover screen visible
+    endPage.classList.toggle("hideMe");
+}
 
 
 
