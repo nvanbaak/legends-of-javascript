@@ -4,17 +4,21 @@ var quizPage = document.getElementById("quizPage");
 var timeLimit = 75;
 var gameOver = false;
 
-
-
 // Question objects have a prompt and an array of four answers.  The corrent answer is always first in the array.
 var question1 = {
     prompt:"Do you oppose the robotic overlords?",
     answers:["No","Of course","With my life!","I'm not sure"]
 }
 
+var question2 = {
+    prompt:"Are you wiling to divulge the location of the human resistance base?",
+    answers:["Anything for you, robotic overlords","I don't know where that is","Death to robots!","I can't read"]
+}
+
 // Eventually we'll just unhide the start page, but while
 // I'm working on the quizpage we're unhiding that instead
-// // startPage.classList.toggle("hideMe");
+
+// startPage.classList.toggle("hideMe");
 quizPage.classList.toggle("hideMe");
 document.getElementById("timer").classList.toggle("hideMe");
 displayQuestion(question1);
@@ -85,7 +89,7 @@ function randomizeArray(inputArray) {
     for (i = 0; i < inputArray.length; i++) {
         newArray.push("");
     }
-    
+
     // Iterate through old array, putting each element a random location in the new array
     for ( i = 0; i < inputArray.length; i++) {
         // Start with a random index
@@ -114,23 +118,16 @@ function randomizeArray(inputArray) {
     return newArray;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 function displayQuestion(ques) {
     // This function takes a question object and dynamically constructs it on the page
 
+    // =================================
+    // ELEMENT CONSTRUCTION
+    // =================================
+
     // First step is to generate the title
     var titlerow = document.createElement("div");
-    titlerow.setAttribute('class', 'row');
+    titlerow.setAttribute('class', 'row topLevel');
     var titlecol = document.createElement("div");
     titlecol.setAttribute('class', 'col');
     var titleP = document.createElement("p");
@@ -143,27 +140,51 @@ function displayQuestion(ques) {
 
     // Then we generate row/column for the answers
     var ansrow = document.createElement("div");
-    ansrow.setAttribute('class', 'row');
+    ansrow.setAttribute('class', 'row topLevel');
     var anscol = document.createElement("div");
     anscol.setAttribute('class', 'answerList d-flex flex-column');
 
-    // Create a paragraph element for each answer and append
+    // =======================================
+    // ANSWER GENERATION
+    // =======================================
+    
+    // New array
+    answerArray = [];
+
+    // For each answer in the question
     for (i = 0; i < 4; i++) {
+
+        // Make a new element
         var ansEl = document.createElement("p");
+        // Only the first answer gets the "correct class"
+        // But everything gets the "answer" class
         if (i === 0) {
             ansEl.setAttribute("class", "answer correct");
         } else {
             ansEl.setAttribute("class", "answer");
         }
+        
+        // Then we add the answer text to the paragraph
         ansEl.innerText = ques.answers[i];
-        anscol.appendChild(ansEl);
+        // Paragraph done!  We add it to the array
+        answerArray.push(ansEl);
     }
 
-    // Finally we append the answers to the page
+    // Randomize the answer array
+    answerArray = randomizeArray(answerArray);
+
+    // Append the answers
+    answerArray.forEach( function(item) {
+        anscol.appendChild(item);
+    });
+
+    // Finally we stuff the answers into the grid
     ansrow.appendChild(anscol);
     quizPage.appendChild(ansrow);
 
-    // Now that the page is set up, we add behavior
+    // ===============================================
+    // ADD CLICK BEHAVIOR
+    // ===============================================
 
     // Background animates based on answer clicked
     document.querySelector(".answerList").addEventListener("click", function(event) {
@@ -192,12 +213,33 @@ function displayQuestion(ques) {
             setTimeout(function () {
                 quizFrame.style = "transition: background-color 500ms";
                 quizFrame.style.backgroundColor = "#f5f5f5dd";
-            }, 100);        
+            }, 100);  
+            
+            // The question is done, so let's delete the page
+            clearQuizPage();
+            // Then we construct the next question
+            displayQuestion(question2);
         }
     });
-
-
 }
+
+function clearQuizPage() {
+    console.log("clearing quizPage");
+
+    // We grab everything with the topLevel class
+    var topLevelEls = document.getElementsByClassName("topLevel");
+
+    // We remove elements until nothing remains with the topLevel class
+    while (topLevelEls.length > 0) {
+        topLevelEls[0].remove();
+    }
+}
+
+document.getElementById("clearBtn").addEventListener("click", function(ev) {
+    console.log(ev);
+    clearQuizPage();
+});
+
 
 
 
