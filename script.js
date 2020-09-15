@@ -5,29 +5,30 @@ var endPage = document.getElementById("endPage");
 var timeLimit = 75;
 var gameOver = false;
 
+
+// Create an array of questions
 // Question objects have a prompt and an array of four answers.  The correct answer is always first in the array.
-var question1 = {
+var qArray = [
+{
     prompt:"Do you oppose the robotic overlords?",
     answers:["No","Of course","With my life!","I'm not sure"]
-}
-
-var question2 = {
+}, {
     prompt:"Are you wiling to divulge the location of the human resistance base?",
     answers:["Anything for you, robotic overlords","I don't know where that is","Death to robots!","I can't read"]
+}, {
+    prompt:"Given a function 'exterminate(human)' that exterminates the human passed to it, what is the correct syntax for exterminating all humans in humanArray?",
+    answers:["humanArray.forEach(exterminate)","hummanArray.exterminate(this)","humanArray[exterminate]","humanArray.forEach(exterminate())"]
 }
-
-// Create an array of questions in random order
-var qArray = randomizeArray([question1, question2]);
+]
+// Randomize question array and set question count at 0
+qArray = randomizeArray(qArray);
 var qCount = 0;
 
-
+// Set the start page as visible on start
 startPage.classList.toggle("hideMe");
-// quizPage.classList.toggle("hideMe");
-// document.getElementById("timer").classList.toggle("hideMe");
-// displayQuestion(question1);
 
-// Start button functionality
 document.getElementById("startBtn").addEventListener("click", function() {
+// Start button functionality
 
     // Hide the start page
     startPage.classList.toggle("hideMe");
@@ -59,7 +60,6 @@ document.getElementById("startBtn").addEventListener("click", function() {
             if ( !gameOver ) {
                 endGame();
             }
-
         }
     }, 1000);
 
