@@ -86,15 +86,36 @@ function randomizeArray(inputArray) {
         newArray.push("");
     }
 
-    function findNextOpenArraySlot() {
-        
+    function findNextOpenArraySlot(index) {
+        // Given an index in array with some combination of empty and non-empty slots, this function returns the next empty slot
+        // This function loops infinitely if there are no empty slots, but in this function it is never called unless there is at least one
+
+        while (newArray[index] != "") {
+            index += 1;
+
+            if (index >= newArray.length) {
+                index = 0;
+            }
+
+        return index;
+        }
+
     }
 
-    //
+    // Iterate through old array, putting each element a random location in the new array
+    for ( i = 0; i < inputArray.length; i++) {
+        // Start with a random index
+        var newIndex = Math.floor(Math.random * newArray.length);
 
+        // If that index is taken, we grab the next index
+        newArray = findNextOpenArraySlot(newIndex);
+    
+        // Put the item in the chosen slot
+        newArray[newIndex] = inputArray[i];
+    }
+
+    return newArray;
 }
-
-
 
 
 
