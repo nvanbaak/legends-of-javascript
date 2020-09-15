@@ -2,13 +2,25 @@
 var startPage = document.getElementById("startPage");
 var quizPage = document.getElementById("quizPage");
 var timeLimit = 75;
+var gameOver = false;
 
+
+
+// Question objects have a prompt and an array of four answers.  The corrent answer is always first in the array.
+var question1 = {
+    prompt:"Do you oppose the robotic overlords?",
+    answers:["No","Of course","With my life!","I'm not sure"]
+}
 
 // Eventually we'll just unhide the start page, but while
 // I'm working on the quizpage we're unhiding that instead
 // // startPage.classList.toggle("hideMe");
 quizPage.classList.toggle("hideMe");
 document.getElementById("timer").classList.toggle("hideMe");
+displayQuestion(question1);
+
+
+
 
 
 // Start button functionality
@@ -24,8 +36,8 @@ document.getElementById("startBtn").addEventListener("click", function() {
     // Start the timer
     var timer = setInterval(function() {
 
-        // While there's still time on the clock
-        if ( timeLimit > 0 ) {
+        // While the game is running and there's still time on the clock
+        if ( !gameOver && timeLimit > 0 ) {
         
             // Decrease the clock and update the display
             timeLimit--;
@@ -65,36 +77,27 @@ function updateTimeDisplay(timeValue) {
     document.getElementById("timerOutput").innerText = (timeMinutes + ":" + timeSeconds);
 }
 
-// Background animates based on answer clicked
-document.querySelector(".answerList").addEventListener("click", function(event) {
-    event.stopPropagation();
 
-    var quizFrame = document.querySelector(".container");
+function randomizeArray(inputArray) {
 
-    // We ignore everything that isn't one of our answers
-    if (event.target.matches("p")) {
-
-        // Set transition speed to 0 so the background changes instantly
-        quizFrame.style = "transition: background-color 0ms";
-
-        // The correct answer turns the background green; otherwise red
-        if ( event.target.classList.value.indexOf("correct") > -1 ) {
-            quizFrame.style.backgroundColor = "#51ff00dd";
-        } else {
-            quizFrame.style.backgroundColor = "#ff0000dd";
-
-            // Incorrect answers also penalize the timer, so we do that here
-            timeLimit -= 10;
-            updateTimeDisplay(timeLimit);
-        }
-
-        // Once we have the new background color, slowly transition back
-        setTimeout(function () {
-            quizFrame.style = "transition: background-color 500ms";
-            quizFrame.style.backgroundColor = "#f5f5f5dd";
-        }, 100);        
+    // Make a new empty array of length equal to inputArray
+    var newArray = [];
+    for (i = 0; i < inputArray.length; i++) {
+        newArray.push("");
     }
-});
+
+    function findNextOpenArraySlot() {
+        
+    }
+
+    //
+
+}
+
+
+
+
+
 
 
 
@@ -106,10 +109,85 @@ document.querySelector(".answerList").addEventListener("click", function(event) 
 
 function displayQuestion(ques) {
     // This function takes a question object and dynamically constructs it on the page
+
+    // First step is to generate the title
+    var titlerow = document.createElement("div");
+    titlerow.setAttribute('class', 'row');
+    var titlecol = document.createElement("div");
+    titlecol.setAttribute('class', 'col');
+    var titleP = document.createElement("p");
+    titleP.innerText = ques.prompt;
+
+    // Append to quizPage
+    titlecol.appendChild(titleP);
+    titlerow.appendChild(titlecol);
+    quizPage.appendChild(titlerow);
+
+    // Then we generate row/column for the answers
+    var ansrow = document.createElement("div");
+    ansrow.setAttribute('class', 'row');
+    var anscol = document.createElement("div");
+    anscol.setAttribute('class', 'answerList d-flex flex-column');
+
+    // Create a paragraph element for each answer and append
+    for (i = 0; i < 4; i++) {
+        var ansEl = document.createElement("p");
+        if (i === 0) {
+            ansEl.setAttribute("class", "answer correct");
+        } else {
+            ansEl.setAttribute("class", "answer");
+        }
+        ansEl.innerText = ques.answers[i];
+        anscol.appendChild(ansEl);
+    }
+
+    // Finally we append the answers to the page
+    ansrow.appendChild(anscol);
+    quizPage.appendChild(ansrow);
+
+    // Now that the page is set up, we add behavior
+
+    // Background animates based on answer clicked
+    document.querySelector(".answerList").addEventListener("click", function(event) {
+        event.stopPropagation();
+
+        var quizFrame = document.querySelector(".container");
+
+        // We ignore everything that isn't one of our answers
+        if (event.target.matches("p")) {
+
+            // Set transition speed to 0 so the background changes instantly
+            quizFrame.style = "transition: background-color 0ms";
+
+            // The correct answer turns the background green; otherwise red
+            if ( event.target.classList.value.indexOf("correct") > -1 ) {
+                quizFrame.style.backgroundColor = "#51ff00dd";
+            } else {
+                quizFrame.style.backgroundColor = "#ff0000dd";
+
+                // Incorrect answers also penalize the timer, so we do that here
+                timeLimit -= 10;
+                updateTimeDisplay(timeLimit);
+            }
+
+            // Once we have the new background color, slowly transition back
+            setTimeout(function () {
+                quizFrame.style = "transition: background-color 500ms";
+                quizFrame.style.backgroundColor = "#f5f5f5dd";
+            }, 100);        
+        }
+    });
+
+
 }
 
-// Question objects have a prompt and an array of four answers.  The corrent answer is always first in the array.
-var question1 = {
-    prompt:"Do you oppose the robotic overlords?",
-    answers:["No","Of course","With my life!","I'm not sure"]
-}
+
+
+
+
+
+
+
+
+
+
