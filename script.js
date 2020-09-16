@@ -92,10 +92,17 @@ document.getElementById("nameSubmit").addEventListener("click", function(event) 
 
     // We fire if they clicked the button
     if ( event.target.matches("button") ) {
-        console.log([
-            document.getElementById("input").value,
+        // Store playerScore in localStorage with provided name
+        localStorage.setItem(
+            document.getElementById("highScore").value,
+            playerScore
+        );
 
-        ])
+        // Turn off the button so they can't just keep resubmitting 
+        document.getElementById("submitBtn").classList.toggle("btn-success");
+        document.getElementById("submitBtn").classList.toggle("btn-disabled");
+        document.getElementById("submitBtn").disabled = true;
+        
     }
 })
 
