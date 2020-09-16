@@ -6,10 +6,9 @@ var timeLimit = 75;
 var numCorrect = 0;
 var gameOver = false;
 
-
-// Create an array of questions
+// Create a random array of questions
 // Question objects have a prompt and an array of four answers.  The correct answer is always first in the array.
-var qArray = [
+var qArray = randomizeArray([
 {
     prompt:"Do you oppose the robotic overlords?",
     answers:["No","Yes"]
@@ -35,30 +34,28 @@ var qArray = [
     prompt:"Melvin the Manhunter needs to generate random numbers for his seek and destroy protocols.  How can he generate a random integer between 1 and 360?",
     answers:["Math.floor(Math.random() * 360) + 1","Math.random(1, 360)","Math.floor(Math.random(360) + 1)","Math.random() * 360"]
 }, {
-    prompt:"",
-    answers:[""]
+    prompt:"What selector should a tactical drone use to find elements with the class 'weapon'?",
+    answers:[".weapon","'weapon'","#weapon","$weapon"]
 }
-]
+]);
 // Randomize question array and set question count at 0
-qArray = randomizeArray(qArray);
 var qCount = 0;
 
 // Set the start page as visible on start
 startPage.classList.toggle("hideMe");
 
 // Type out splash quote
-var splash = document.getElementById("startQuote")
-pretendITypedThis("In the grim darkness of the far future, your knowledge of basic web development trivia is all that stands between the human race... and oblivion.", splash);
+pretendITypedThis("In the grim darkness of the far future, your knowledge of basic web development trivia is all that stands between the human race... and oblivion.", document.getElementById("startQuote"));
 
-
-document.getElementById("startBtn").addEventListener("click", function() {
 // Start button functionality
+document.getElementById("startBtn").addEventListener("click", function() {
 
     // Hide the start page
     startPage.classList.toggle("hideMe");
 
-    // Make timer and quizPage visible
+    // Make timer, score, and quizPage visible
     document.getElementById("timer").classList.toggle("hideMe");
+    document.getElementById("scoreCounter").classList.toggle("hideMe");
     quizPage.classList.toggle("hideMe");
 
     // Then we display the first question in the array
@@ -89,6 +86,18 @@ document.getElementById("startBtn").addEventListener("click", function() {
 
 });
 
+// Score submission button
+document.getElementById("nameSubmit").addEventListener("click", function(event) {
+    event.preventDefault();
+
+    // We fire if they clicked the button
+    if ( event.target.matches("button") ) {
+        
+        
+    }
+})
+
+
 function updateTimeDisplay(timeValue) {
     // This function takes a time value in seconds and outputs it to the timer display
     
@@ -107,6 +116,9 @@ function updateTimeDisplay(timeValue) {
 
     // Output the values
     document.getElementById("timerOutput").innerText = (timeMinutes + ":" + timeSeconds);
+
+    // We also update the score display
+    document.getElementById("scoreOutput").innerText = timeLimit * numCorrect;
 }
 
 function randomizeArray(inputArray) {
@@ -279,8 +291,6 @@ function displayQuestion(ques) {
 }
 
 function clearQuizPage() {
-    console.log("clearing quizPage");
-
     // We grab everything with the topLevel class
     var topLevelEls = document.getElementsByClassName("topLevel");
 
@@ -302,11 +312,11 @@ function endGame() {
     // Update gameOver content
     if (timeLimit <=0 ) {
         document.getElementById("gameResult").innerText = "lose!";
-        document.getElementById("numCorrect").innerText = numCorrect;
+        document.getElementById("correct").innerText = numCorrect;
         document.getElementById("score").innerText = numCorrect;
     } else {
         document.getElementById("gameResult").innerText = "win!";
-        document.getElementById("numCorrect").innerText = numCorrect;
+        document.getElementById("correct").innerText = numCorrect;
         document.getElementById("score").innerText = timeLimit * numCorrect;
     }
 
@@ -336,7 +346,10 @@ function pretendITypedThis(string, element) {
     }, 75);
 }
 
+function sortIntoHighScores(num, array) {
+    // 
 
+}
 
 
 

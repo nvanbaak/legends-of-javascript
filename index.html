@@ -53,7 +53,11 @@
 
             <div class="row">
                 <div class="col">
-                    <p class="splashQuote">You <span id=gameResult>  You got <span id=numCorrect></span> questions correct and earned a score of <span id=score></span>.  Enter your initials below:</p>
+                    <p class="splashQuote">You <span id=gameResult></span>  Thank you for assisting your robotic overlords with the destruction of your puny race.  You got <span id=correct></span> questions correct and earned a score of <span id=score></span>.  Enter your initials below:</p>
+                    <form id="nameSubmit">
+                        <input id="highScore" type="text">
+                        <button class="btn btn-success" type="submit">Submit</button>
+                    </form>
                 </div>
             </div>
             
@@ -71,12 +75,15 @@
                 <button id="scoreBtn">Display High Scores</button>
             </div>
             <div class="col">
-                <p id="timer" class="hideMe">Time:
-
+                <p id="timer" class="hideMe">Time: 
                     <span id="timerOutput">1:15</span>
                     </p>
             </div>
-            <div class="col"></div>
+            <div class="col">
+                <p id="scoreCounter" class="hideMe">Score: 
+                    <span id="scoreOutput">75</span>
+                    </p>
+            </div>
         </div>
     </footer>
 
