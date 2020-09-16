@@ -11,7 +11,8 @@ var playerScore;
 var numCorrect;
 var gameOver;
 var qCount;
-var qArray = [];
+var qArray;
+var sessionHighScores;
 
 newGame();
 
@@ -21,13 +22,17 @@ startPage.classList.toggle("hideMe");
 // Type out splash quote
 pretendITypedThis("In the grim darkness of the far future, your knowledge of basic web development trivia is all that stands between the human race... and oblivion.", document.getElementById("startQuote"));
 
+// ===============================
+//           FUNCTIONS
+// ===============================
+
 function newGame() {
     // TimeLimit starts equal to playerScore
     timeLimit = playerScore = 120;
 
     // The player has answered no questions and has gotten none correct
-    numCorrect = 0;
     qCount = 0;
+    numCorrect = 0;
 
     // Obviously the game's not over
     gameOver = false;
@@ -64,6 +69,27 @@ function newGame() {
             answers:[".weapon","'weapon'","#weapon","$weapon"]
         }
         ]);
+
+    // Finally we grab the values of any stored high scores
+    scoreTable = localStorage.getItem("highScores");
+
+    // If there are no stored scores, we make an empty score list
+    if (scoreTable === null) {
+        // make scoreTable an array
+        scoreTable = [];
+        // Add some score objects
+        for (i = 10; i > 0 ; i--) {
+            scoreTable.push( {
+                name:("QuizBot #" + i),
+                score:i * 50
+            } );
+        }
+    } else {
+        scoreTable = JSON.parse(scoreTable);
+    }
+
+    // Use scoreTable as the basis for our dynamic high score list
+    sessionHighScores = scoreTable;
 }
 
 // Start button functionality
