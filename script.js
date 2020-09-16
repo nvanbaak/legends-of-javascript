@@ -2,7 +2,7 @@
 var startPage = document.getElementById("startPage");
 var quizPage = document.getElementById("quizPage");
 var endPage = document.getElementById("endPage");
-var timeLimit = 75;
+var timeLimit = playerscore = 120;
 var numCorrect = 0;
 var gameOver = false;
 
@@ -92,8 +92,10 @@ document.getElementById("nameSubmit").addEventListener("click", function(event) 
 
     // We fire if they clicked the button
     if ( event.target.matches("button") ) {
-        
-        
+        console.log([
+            document.getElementById("input").value,
+
+        ])
     }
 })
 
@@ -112,13 +114,23 @@ function updateTimeDisplay(timeValue) {
     } else if ( timeSeconds < 0) {
         // We don't let the clock run negative
         timeSeconds = "00";
+        
+        // Technically you could drive the clock negative by pushing timeLimit past -60, but the game will end before you can get that far
     }
 
     // Output the values
     document.getElementById("timerOutput").innerText = (timeMinutes + ":" + timeSeconds);
 
     // We also update the score display
-    document.getElementById("scoreOutput").innerText = timeLimit * numCorrect;
+    updateScore();
+}
+
+function updateScore() {
+    // Calculate score; we bound the time variable at a minimum of 1 so you'll at least get credit for correct answers 
+    playerScore = numCorrect * Math.max(1, timeLimit);
+
+    // Update score display
+    document.getElementById("scoreOutput").innerText = playerScore;
 }
 
 function randomizeArray(inputArray) {
@@ -247,8 +259,9 @@ function displayQuestion(ques) {
             if ( event.target.classList.value.indexOf("correct") > -1 ) {
                 quizFrame.style.backgroundColor = "#51ff00dd";
 
-                // We increment the correct answers counter
+                // Give the player credit for correct answer, then update their score
                 numCorrect++;
+                updateScore();
             } else {
                 quizFrame.style.backgroundColor = "#ff0000dd";
 
@@ -317,7 +330,7 @@ function endGame() {
     } else {
         document.getElementById("gameResult").innerText = "win!";
         document.getElementById("correct").innerText = numCorrect;
-        document.getElementById("score").innerText = timeLimit * numCorrect;
+        document.getElementById("score").innerText = playerScore;
     }
 
     // Finally, make the gameover screen visible
