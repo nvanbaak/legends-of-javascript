@@ -27,6 +27,11 @@ var qCount = 0;
 // Set the start page as visible on start
 startPage.classList.toggle("hideMe");
 
+// Type out splash quote
+var splash = document.getElementById("startQuote")
+pretendITypedThis("In the grim darkness of the far future, your knowledge of basic web development trivia is all that stands between the human race... and oblivion.", splash);
+
+
 document.getElementById("startBtn").addEventListener("click", function() {
 // Start button functionality
 
@@ -275,6 +280,30 @@ function endGame() {
     // Finally, make the gameover screen visible
     endPage.classList.toggle("hideMe");
 }
+
+function pretendITypedThis(string, element) {
+    // This function takes the passed string and puts it into the element one character at a time
+
+    // Set up output string and character index
+    var outputString = "";
+    var charIndex = 0;
+
+    // We use an interval to make it look like it's typing
+    var typeDelay = setInterval( function() {
+        
+        // Add current character to output, then increment charIndex
+        outputString += string[charIndex];
+        charIndex++;
+
+        element.innerText = outputString;
+
+        if (charIndex >= string.length) {
+            clearInterval(typeDelay);
+        }
+    }, 75);
+}
+
+
 
 
 
