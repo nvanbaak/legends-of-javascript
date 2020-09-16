@@ -42,7 +42,7 @@ body {
 
 .answerList {
     margin: 0px 30%;
-    text-align: left;
+    text-align: center;
     padding: 0px 10px;
     border-radius: 10px;
     width: 100%;
@@ -72,10 +72,6 @@ body {
 
 }
 
-.wrongAnswer {
-    animation: wrongAnswer 1000ms;
-}
-
 footer {
     /* Position */
     position: fixed;
@@ -99,6 +95,6 @@ footer {
     display: none;
 }
 
-.salmon {
-    background-color: salmon;
+.score-row p {
+    margin-left: 30%;
 }

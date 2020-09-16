@@ -79,9 +79,7 @@
     <footer class>
         <div class="row d-flex justify-content-between">
             <div class="col">
-                <button id="scoreBtn" type="button" data-target="#highScoresModal" data-toggle="modal">Display High Scores</button>
-                    Display High Scores
-                </button>
+                <button id="scoreBtn" type="button" data-target="#highScoresModal" data-toggle="modal">High Scores</button>
             </div>
             <div class="col">
                 <p id="timer" class="hideMe">Time:
@@ -96,6 +94,7 @@
         </div>
     </footer>
 
+    <!-- Modal, used to display high scores -->
     <div class="modal" id="highScoresModal" role="dialog" aria-labelledby="scoreHeader" aria-hidden="true">
         <div class="modal-dialog modal-dialogue-centered" role="document">
             <div class="modal-content">
@@ -103,8 +102,7 @@
                     <h3 id="scoreHeader">High Scores</h3>
                     <button type="button" class="close btn-danger" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div class="modal-body">
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus soluta ullam rem assumenda, omnis debitis reprehenderit minima quos quia quo illum accusantium eligendi quod, similique distinctio repellat. Nesciunt, consequuntur. Dolor.</p>
+                <div class="modal-body" id="scoreModalTable">
                 </div>
             </div>
         </div>

@@ -85,11 +85,46 @@ function newGame() {
             } );
         }
     } else {
+        // If there are stored scores, we just use those
         scoreTable = JSON.parse(scoreTable);
     }
 
     // Use scoreTable as the basis for our dynamic high score list
     sessionHighScores = scoreTable;
+
+    // Populate the high score display
+    populateHighScores();
+}
+
+function populateHighScores() {
+
+    // Clear the list
+
+    // Grab anything with class "score-row"
+    var oldRows = document.getElementsByClassName("score-row");
+
+    // Keep killing the first element until we run out
+    while (oldRows.length > 0) {
+        oldRows[0].remove();
+    }
+
+    // Append updated scores
+
+    // For each high score
+    sessionHighScores.forEach( function(thisguy) {
+
+        // Make a row div
+        var scoreRow = document.createElement("div");
+        scoreRow.setAttribute('class','row score-row');
+
+        // Put the high scorer's name and score in a paragraph
+        var scoreP = document.createElement("p");
+        scoreP.innerText = thisguy.name + ": " + thisguy.score;
+
+        // Append up the chain to the high score list
+        scoreRow.appendChild(scoreP);
+        document.getElementById("scoreModalTable").appendChild(scoreRow);
+    })
 }
 
 // Start button functionality
