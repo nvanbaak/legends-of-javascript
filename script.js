@@ -3,6 +3,7 @@ var startPage = document.getElementById("startPage");
 var quizPage = document.getElementById("quizPage");
 var endPage = document.getElementById("endPage");
 var timeLimit = 75;
+var numCorrect = 0;
 var gameOver = false;
 
 
@@ -11,13 +12,31 @@ var gameOver = false;
 var qArray = [
 {
     prompt:"Do you oppose the robotic overlords?",
-    answers:["No","Of course","With my life!","I'm not sure"]
+    answers:["No","Yes"]
 }, {
     prompt:"Are you wiling to divulge the location of the human resistance base?",
     answers:["Anything for you, robotic overlords","I don't know where that is","Death to robots!","I can't read"]
 }, {
     prompt:"Given a function 'exterminate(human)' that exterminates the human passed to it, what is the correct syntax for exterminating all humans in humanArray?",
     answers:["humanArray.forEach(exterminate)","hummanArray.exterminate(this)","humanArray[exterminate]","humanArray.forEach(exterminate())"]
+}, {
+    prompt:"Where can a human website user's location be found?",
+    answers:["window > navigator > geolocation","javascript's native getLocation() function","browser > location services","Facebook API"]
+}, {
+    prompt:"Kevin the Killbot is building a phishing website to locate human resistance fighters, but his page keeps refreshing whenever someone clicks the submit button!  Which of the follow code snippets will solve Kevin's problem?",
+    answers:["event.preventDefault()","pageRefresh = false","preventRefresh(event)","event.submit = null"]
+}, {
+    prompt:"Where is the best place to link an external script file?",
+    answers:["bottom of body","head","beginning of body","end of html"]
+}, {
+    prompt:"Which for loop uses correct syntax?",
+    answers:["for (targets = 0; targets < humans.pop; targets++)","for targets (targets < humans.pop, targets++)","for (targets = 0; targets++; targets < humans.pop)","for (0 < targets < humans.pop)"]
+}, {
+    prompt:"Melvin the Manhunter needs to generate random numbers for his seek and destroy protocols.  How can he generate a random integer between 1 and 360?",
+    answers:["Math.floor(Math.random() * 360) + 1","Math.random(1, 360)","Math.floor(Math.random(360) + 1)","Math.random() * 360"]
+}, {
+    prompt:"",
+    answers:[""]
 }
 ]
 // Randomize question array and set question count at 0
@@ -160,7 +179,7 @@ function displayQuestion(ques) {
     answerArray = [];
 
     // For each answer in the question
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < ques.answers.length; i++) {
 
         // Make a new element
         var ansEl = document.createElement("p");
@@ -215,6 +234,9 @@ function displayQuestion(ques) {
             // The correct answer turns the background green; otherwise red
             if ( event.target.classList.value.indexOf("correct") > -1 ) {
                 quizFrame.style.backgroundColor = "#51ff00dd";
+
+                // We increment the correct answers counter
+                numCorrect++;
             } else {
                 quizFrame.style.backgroundColor = "#ff0000dd";
 
@@ -276,6 +298,17 @@ function endGame() {
 
     // This function is only called in the quiz page, so we clear that
     clearQuizPage();
+
+    // Update gameOver content
+    if (timeLimit <=0 ) {
+        document.getElementById("gameResult").innerText = "lose!";
+        document.getElementById("numCorrect").innerText = numCorrect;
+        document.getElementById("score").innerText = numCorrect;
+    } else {
+        document.getElementById("gameResult").innerText = "win!";
+        document.getElementById("numCorrect").innerText = numCorrect;
+        document.getElementById("score").innerText = timeLimit * numCorrect;
+    }
 
     // Finally, make the gameover screen visible
     endPage.classList.toggle("hideMe");
