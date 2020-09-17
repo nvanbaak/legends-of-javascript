@@ -28,12 +28,13 @@ pretendITypedThis("In the grim darkness of the far future, your knowledge of bas
 // ===============================
 
 function newGame() {
-    // TimeLimit starts equal to playerScore
-    timeLimit = playerScore = 120;
+    // TimeLimit is in seconds
+    timeLimit = 120;
 
     // The player has answered no questions and has gotten none correct
     qCount = 0;
     numCorrect = 0;
+    playerScore = 0;
 
     // Obviously the game's not over
     gameOver = false;
@@ -42,34 +43,34 @@ function newGame() {
     // Question objects have a prompt and an array of four answers.  The correct answer is always first in the array.
     qArray = randomizeArray([
         {
-            prompt:"Do you oppose the robotic overlords?",
-            answers:["No","Yes"]
+            prompt: "Do you oppose the robotic overlords?",
+            answers: ["No", "Yes"]
         }, {
-            prompt:"Are you wiling to divulge the location of the human resistance base?",
-            answers:["Anything for you, robotic overlords","I don't know where that is","Death to robots!","I can't read"]
+            prompt: "Are you wiling to divulge the location of the human resistance base?",
+            answers: ["Anything for you, robotic overlords", "I don't know where that is", "Death to robots!", "I can't read"]
         }, {
-            prompt:"Given a function 'exterminate(human)' that exterminates the human passed to it, what is the correct syntax for exterminating all humans in humanArray?",
-            answers:["humanArray.forEach(exterminate)","hummanArray.exterminate(this)","humanArray[exterminate]","humanArray.forEach(exterminate())"]
+            prompt: "Given a function 'exterminate(human)' that exterminates the human passed to it, what is the correct syntax for exterminating all humans in humanArray?",
+            answers: ["humanArray.forEach(exterminate)", "hummanArray.exterminate(this)", "humanArray[exterminate]", "humanArray.forEach(exterminate())"]
         }, {
-            prompt:"Where can a human website user's location be found?",
-            answers:["window > navigator > geolocation","javascript's native getLocation() function","browser > location services","Facebook API"]
+            prompt: "Where can a human website user's location be found?",
+            answers: ["window > navigator > geolocation", "javascript's native getLocation() function", "browser > location services", "Facebook API"]
         }, {
-            prompt:"Kevin the Killbot is building a phishing website to locate human resistance fighters, but his page keeps refreshing whenever someone clicks the submit button!  Which of the follow code snippets will solve Kevin's problem?",
-            answers:["event.preventDefault()","pageRefresh = false","preventRefresh(event)","event.submit = null"]
+            prompt: "Kevin the Killbot is building a phishing website to locate human resistance fighters, but his page keeps refreshing whenever someone clicks the submit button!  Which of the follow code snippets will solve Kevin's problem?",
+            answers: ["event.preventDefault()", "pageRefresh = false", "preventRefresh(event)", "event.submit = null"]
         }, {
-            prompt:"Where is the best place to link an external script file?",
-            answers:["bottom of body","head","beginning of body","end of html"]
+            prompt: "Where is the best place to link an external script file?",
+            answers: ["bottom of body", "head", "beginning of body", "end of html"]
         }, {
-            prompt:"Which for loop uses correct syntax?",
-            answers:["for (targets = 0; targets < humans.pop; targets++)","for targets (targets < humans.pop, targets++)","for (targets = 0; targets++; targets < humans.pop)","for (0 < targets < humans.pop)"]
+            prompt: "Which for loop uses correct syntax?",
+            answers: ["for (targets = 0; targets < humans.pop; targets++)", "for targets (targets < humans.pop, targets++)", "for (targets = 0; targets++; targets < humans.pop)", "for (0 < targets < humans.pop)"]
         }, {
-            prompt:"Melvin the Manhunter needs to generate random numbers for his seek and destroy protocols.  How can he generate a random integer between 1 and 360?",
-            answers:["Math.floor(Math.random() * 360) + 1","Math.random(1, 360)","Math.floor(Math.random(360) + 1)","Math.random() * 360"]
+            prompt: "Melvin the Manhunter needs to generate random numbers for his seek and destroy protocols.  How can he generate a random integer between 1 and 360?",
+            answers: ["Math.floor(Math.random() * 360) + 1", "Math.random(1, 360)", "Math.floor(Math.random(360) + 1)", "Math.random() * 360"]
         }, {
-            prompt:"What selector should a tactical drone use to find elements with the class 'weapon'?",
-            answers:[".weapon","'weapon'","#weapon","$weapon"]
+            prompt: "What selector should a tactical drone use to find elements with the class 'weapon'?",
+            answers: [".weapon", "'weapon'", "#weapon", "$weapon"]
         }
-        ]);
+    ]);
 
     // Finally we grab the values of any stored high scores
     scoreTable = localStorage.getItem("highScores");
@@ -79,11 +80,11 @@ function newGame() {
         // make scoreTable an array
         scoreTable = [];
         // Add some score objects
-        for (i = 10; i > 0 ; i--) {
-            scoreTable.push( {
-                name:("QuizBot #" + i),
-                score:i * 50
-            } );
+        for (i = 10; i > 0; i--) {
+            scoreTable.push({
+                name: ("QuizBot #" + i),
+                score: i * 50
+            });
         }
     } else {
         // If there are stored scores, we just use those
@@ -109,27 +110,52 @@ function populateHighScores() {
         oldRows[0].remove();
     }
 
-    // Append updated scores
+    // Update score, then determine player's score ranking
 
-    // For each high score
-    sessionHighScores.forEach( function(thisguy) {
+    updateScore();
+    // Player starts at rank 11 (zero-indexed)
+    var rank = 10;
+
+    // Then we keep increasing the player's rank as long as the next person on the list scored less than them
+    while (playerScore > sessionHighScores[rank - 1].score) {
+        rank--;
+        // Stop looping if we hit the top of the list
+        if (rank === 0) {
+            break;
+        }
+    }
+
+    // Now we append the 10 best scores
+    for (i = 0; i < 10; i++) {
 
         // Make a row div
         var scoreRow = document.createElement("div");
-        scoreRow.setAttribute('class','row score-row');
+        scoreRow.setAttribute('class', 'row score-row');
 
-        // Put the high scorer's name and score in a paragraph
+        // Make a paragraph element
         var scoreP = document.createElement("p");
-        scoreP.innerText = thisguy.name + ": " + thisguy.score;
+
+        // Before adding information, adjust index based on the player's rank
+        if (i < rank) {
+            // If we haven't run into the player yet, proceed as normal
+            scoreP.innerText = sessionHighScores[i].name + ": " + sessionHighScores[i].score;
+
+        } else if (i === rank) {
+            // If this is the player, we use that information instead
+            scoreP.innerText = "**YOU**: " + playerScore;
+        } else {
+            // Everyone else gets bumped down by one
+            scoreP.innerText = sessionHighScores[i - 1].name + ": " + sessionHighScores[i - 1].score;
+        }
 
         // Append up the chain to the high score list
         scoreRow.appendChild(scoreP);
         document.getElementById("scoreModalTable").appendChild(scoreRow);
-    })
+    }
 }
 
 // Start button functionality
-document.getElementById("startBtn").addEventListener("click", function() {
+document.getElementById("startBtn").addEventListener("click", function () {
 
     // Hide the start page
     startPage.classList.toggle("hideMe");
@@ -147,11 +173,11 @@ document.getElementById("startBtn").addEventListener("click", function() {
     // ===================================
 
     // Start the timer
-    var timer = setInterval(function() {
+    var timer = setInterval(function () {
 
         // While the game is running and there's still time on the clock
-        if ( !gameOver && timeLimit > 0 ) {
-        
+        if (!gameOver && timeLimit > 0) {
+
             // Don't decrease anything if the game is paused
             if (!gamePaused) {
                 // Otherwise decrease the clock and update the display
@@ -166,7 +192,7 @@ document.getElementById("startBtn").addEventListener("click", function() {
             document.getElementById("timer").style.color = "red";
 
             // endGame() trips the gameOver flag if it's called somewhere else, so we only need to call it if gameOVer is false
-            if ( !gameOver ) {
+            if (!gameOver) {
                 endGame();
             }
         }
@@ -175,31 +201,77 @@ document.getElementById("startBtn").addEventListener("click", function() {
 });
 
 // Score submission button
-document.getElementById("nameSubmit").addEventListener("click", function(event) {
+document.getElementById("nameSubmit").addEventListener("click", function (event) {
     event.preventDefault();
 
     // We fire if they clicked the button
-    if ( event.target.matches("button") ) {
+    if (event.target.matches("button")) {
 
         // get a reference to alert bar
         var alert = document.getElementById("submitAlert");
 
         // If the high score input isn't empty
-        if ( document.getElementById("highScore").value != "") {
+        if (document.getElementById("highScore").value != "") {
 
-            // Store playerScore in localStorage with provided name
+            // ================================
+            // CREATE HIGH SCORE ARRAY
+            // ================================
+
+            // As with the population function, we update the player score and set rank = 11 (zero-index)
+            updateScore();
+            var rank = 10;
+
+            // Then we keep increasing the player's rank as long as the next person on the list scored less than them
+            while (playerScore > sessionHighScores[rank - 1].score) {
+                rank--;
+                // Stop looping if we hit the top of the list
+                if (rank === 0) {
+                    break;
+                }
+            }
+
+            // Now we make an array out of the 10 highest score objects
+            var finalScoreList = [];
+            for (i = 0; i < 10; i++) {
+
+                var scoreObj = {
+                    name:"placeholder",
+                    score:0
+                }
+
+                // Before adding information, adjust index based on the player's rank
+                if (i < rank) {
+                    // If we haven't run into the player yet, proceed as normal
+                    scoreObj.name = sessionHighScores[i].name;
+                    scoreObj.score = sessionHighScores[i].score;
+
+                } else if (i === rank) {
+                    // If this is the player, we use that information instead
+                    scoreObj.name = document.getElementById("highScore").value;
+                    scoreObj.score = playerScore;
+                } else {
+                    // Everyone else gets bumped down by one
+                    scoreObj.name = sessionHighScores[i-1].name;
+                    scoreObj.score = sessionHighScores[i-1].score;
+                }
+
+                // Add score object to finalScoreList
+                finalScoreList.push(scoreObj);
+            }
+
+            // Store list in localStorage
             localStorage.setItem(
-                document.getElementById("highScore").value,
-                playerScore
-                );
-                
-                // Turn off the button so they can't just keep resubmitting 
-                document.getElementById("submitBtn").classList.toggle("btn-success");
-                document.getElementById("submitBtn").classList.toggle("btn-disabled");
-                document.getElementById("submitBtn").disabled = true;
+               "highScores",
+                JSON.stringify(finalScoreList)
+            );
 
-                // Hide the alert banner
-                alert.style.display = "none";
+            // Turn off the button so they can't just keep resubmitting 
+            document.getElementById("submitBtn").classList.toggle("btn-success");
+            document.getElementById("submitBtn").classList.toggle("btn-disabled");
+            document.getElementById("submitBtn").disabled = true;
+
+            // Hide the alert banner
+            alert.style.display = "none";
         } else {
 
             // If it is empty, warn the user
@@ -209,36 +281,33 @@ document.getElementById("nameSubmit").addEventListener("click", function(event) 
 })
 
 // Update stats and pause game when score display is opened
-document.getElementById("scoreBtn").addEventListener("click", function() {
+document.getElementById("scoreBtn").addEventListener("click", function () {
 
-
-
+    populateHighScores();
     gamePaused = true;
 });
 
 // Unpause game when modal is closed
-document.getElementById("modal-close").addEventListener("click", function() {
+document.getElementById("modal-close").addEventListener("click", function () {
     gamePaused = false;
 });
 
 
-
-
 function updateTimeDisplay(timeValue) {
     // This function takes a time value in seconds and outputs it to the timer display
-    
+
     // get the seconds value using modulo 60
     var timeSeconds = timeValue % 60;
     // get the minutes value by subtracting the seconds and dividing by 60
-    var timeMinutes = Math.floor( (timeValue - timeSeconds) / 60 )
+    var timeMinutes = Math.floor((timeValue - timeSeconds) / 60)
 
     // if the seconds value is under 10 we need to add another 0 or it looks weird
-    if ( timeSeconds < 10 && timeSeconds >= 0) {
+    if (timeSeconds < 10 && timeSeconds >= 0) {
         timeSeconds = "0" + timeSeconds;
-    } else if ( timeSeconds < 0) {
+    } else if (timeSeconds < 0) {
         // We don't let the clock run negative
         timeSeconds = "00";
-        
+
         // Technically you could drive the clock negative by pushing timeLimit past -60, but the game will end before you can get that far
     }
 
@@ -266,14 +335,14 @@ function randomizeArray(inputArray) {
     }
 
     // Iterate through old array, putting each element a random location in the new array
-    for ( i = 0; i < inputArray.length; i++) {
+    for (i = 0; i < inputArray.length; i++) {
         // Start with a random index
         var newIndex = Math.floor(Math.random() * newArray.length);
 
         // Check if the array slot at that index is occupied
         if (newArray[newIndex] != "") {
 
-        // If so, loop until we find an empty slot
+            // If so, loop until we find an empty slot
             while (newArray[newIndex] != "") {
 
                 // Increase the index
@@ -322,7 +391,7 @@ function displayQuestion(ques) {
     // =======================================
     // ANSWER GENERATION
     // =======================================
-    
+
     // New array
     answerArray = [];
 
@@ -338,7 +407,7 @@ function displayQuestion(ques) {
         } else {
             ansEl.setAttribute("class", "answer");
         }
-        
+
         // Then we add the answer text to the paragraph
         ansEl.innerText = ques.answers[i];
         // Paragraph done!  We add it to the array
@@ -349,7 +418,7 @@ function displayQuestion(ques) {
     answerArray = randomizeArray(answerArray);
 
     // Append the answers
-    answerArray.forEach( function(item) {
+    answerArray.forEach(function (item) {
         anscol.appendChild(item);
     });
 
@@ -362,7 +431,7 @@ function displayQuestion(ques) {
     // ===============================================
 
     // Background animates based on answer clicked
-    document.querySelector(".answerList").addEventListener("click", function(event) {
+    document.querySelector(".answerList").addEventListener("click", function (event) {
         event.stopPropagation();
 
         var quizFrame = document.querySelector(".container");
@@ -380,7 +449,7 @@ function displayQuestion(ques) {
             quizFrame.style = "transition: background-color 0ms";
 
             // The correct answer turns the background green; otherwise red
-            if ( event.target.classList.value.indexOf("correct") > -1 ) {
+            if (event.target.classList.value.indexOf("correct") > -1) {
                 quizFrame.style.backgroundColor = "#51ff00dd";
 
                 // Give the player credit for correct answer, then update their score
@@ -410,12 +479,12 @@ function displayQuestion(ques) {
             // ===========================
             // WRAP UP QUESTION
             // ===========================
-            
+
             // The question is done, so move on to the next
             qCount++;
 
             // Check if we're done
-            if ( qCount < qArray.length ) {
+            if (qCount < qArray.length) {
                 // If not, clear the page and display the next question
                 clearQuizPage();
                 displayQuestion(qArray[qCount]);
@@ -447,7 +516,7 @@ function endGame() {
     clearQuizPage();
 
     // Update gameOver content
-    if (timeLimit <=0 ) {
+    if (timeLimit <= 0) {
         document.getElementById("gameResult").innerText = "lose!";
         document.getElementById("correct").innerText = numCorrect;
         document.getElementById("score").innerText = numCorrect;
@@ -469,8 +538,8 @@ function pretendITypedThis(string, element) {
     var charIndex = 0;
 
     // We use an interval to make it look like it's typing
-    var typeDelay = setInterval( function() {
-        
+    var typeDelay = setInterval(function () {
+
         // Add current character to output, then increment charIndex
         outputString += string[charIndex];
         charIndex++;
@@ -487,7 +556,7 @@ function sortIntoHighScores() {
     // This function runs through the high scores list until it finds a score that's smaller than the player's.  Then it inserts the player's score at that index and moves everything else down.
 
 
-    
+
 
 }
 
