@@ -46,7 +46,7 @@ function newGame() {
             prompt: "Do you oppose the robotic overlords?",
             answers: ["No", "Yes"]
         }, {
-            prompt: "Are you wiling to divulge the location of the human resistance base?",
+            prompt: "Are you willing to divulge the location of the human resistance base?",
             answers: ["Anything for you, robotic overlords", "I don't know where that is", "Death to robots!", "I can't read"]
         }, {
             prompt: "Given a function 'exterminate(human)' that exterminates the human passed to it, what is the correct syntax for exterminating all humans in humanArray?",
@@ -64,11 +64,14 @@ function newGame() {
             prompt: "Which for loop uses correct syntax?",
             answers: ["for (targets = 0; targets < humans.pop; targets++)", "for targets (targets < humans.pop, targets++)", "for (targets = 0; targets++; targets < humans.pop)", "for (0 < targets < humans.pop)"]
         }, {
-            prompt: "Melvin the Manhunter needs to generate random numbers for his seek and destroy protocols.  How can he generate a random integer between 1 and 360?",
+            prompt: "Melvin the Murderbot needs to generate random numbers for his seek and destroy protocols.  How can he generate a random integer between 1 and 360?",
             answers: ["Math.floor(Math.random() * 360) + 1", "Math.random(1, 360)", "Math.floor(Math.random(360) + 1)", "Math.random() * 360"]
         }, {
             prompt: "What selector should a tactical drone use to find elements with the class 'weapon'?",
             answers: [".weapon", "'weapon'", "#weapon", "$weapon"]
+        }, {
+            prompt: "BureaucracyBot 9000 has declared a variable 'wantedPoster' and assigned an <img> of a poster to it.  Which of these code snippets will allow it to dynamically put the wanted poster inside of a div?",
+            answers: ["div.appendChild(wantedPoster)","div + wantedPoster","wantedPoster.append(div)","<div <wantedPoster> >"]
         }
     ]);
 
@@ -199,6 +202,25 @@ document.getElementById("startBtn").addEventListener("click", function () {
     }, 1000);
 
 });
+
+// Reset button functionality
+document.getElementById("resetBtn").addEventListener("click", function() {
+    
+    // First we move from game over to start
+    endPage.classList.toggle("hideMe");
+    startPage.classList.toggle("hideMe");
+
+    // Next we hide the timer and score
+    document.getElementById("timer").classList.toggle("hideMe");
+    document.getElementById("scoreCounter").classList.toggle("hideMe");
+
+    // We also need to fix the timer styling
+    document.getElementById("timer").style.color="black";
+    document.getElementById("timerOutput").innerText = "2:00";
+
+    // Then run newGame() to reset all the variables
+    newGame();
+})
 
 // Score submission button
 document.getElementById("nameSubmit").addEventListener("click", function (event) {
@@ -518,15 +540,14 @@ function endGame() {
     // Update gameOver content
     if (timeLimit <= 0) {
         document.getElementById("gameResult").innerText = "lose!";
-        document.getElementById("correct").innerText = numCorrect;
-        document.getElementById("score").innerText = numCorrect;
     } else {
         document.getElementById("gameResult").innerText = "win!";
-        document.getElementById("correct").innerText = numCorrect;
-        document.getElementById("score").innerText = playerScore;
     }
-
+    document.getElementById("correct").innerText = numCorrect;
+    document.getElementById("score").innerText = playerScore;
+    
     // Finally, make the gameover screen visible
+    quizPage.classList.toggle("hideMe");
     endPage.classList.toggle("hideMe");
 }
 
@@ -551,16 +572,6 @@ function pretendITypedThis(string, element) {
         }
     }, 75);
 }
-
-function sortIntoHighScores() {
-    // This function runs through the high scores list until it finds a score that's smaller than the player's.  Then it inserts the player's score at that index and moves everything else down.
-
-
-
-
-}
-
-
 
 
 
