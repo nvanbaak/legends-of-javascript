@@ -218,6 +218,11 @@ document.getElementById("resetBtn").addEventListener("click", function() {
     document.getElementById("timer").style.color="black";
     document.getElementById("timerOutput").innerText = "2:00";
 
+    // Unlock score submission button
+    document.getElementById("submitBtn").classList.toggle("btn-success");
+    document.getElementById("submitBtn").classList.toggle("btn-disabled");
+    document.getElementById("submitBtn").disabled = false;
+
     // Then run newGame() to reset all the variables
     newGame();
 })
