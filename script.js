@@ -13,6 +13,7 @@ var gameOver;
 var qCount;
 var qArray;
 var sessionHighScores;
+var gamePaused = false;
 
 newGame();
 
@@ -141,15 +142,22 @@ document.getElementById("startBtn").addEventListener("click", function() {
     // Then we display the first question in the array
     displayQuestion(qArray[qCount]);
 
+    // ===================================
+    //         TIMER FUNCTIONALITY
+    // ===================================
+
     // Start the timer
     var timer = setInterval(function() {
 
         // While the game is running and there's still time on the clock
         if ( !gameOver && timeLimit > 0 ) {
         
-            // Decrease the clock and update the display
-            timeLimit--;
-            updateTimeDisplay(timeLimit);
+            // Don't decrease anything if the game is paused
+            if (!gamePaused) {
+                // Otherwise decrease the clock and update the display
+                timeLimit--;
+                updateTimeDisplay(timeLimit);
+            }
 
         } else {
 
@@ -199,6 +207,21 @@ document.getElementById("nameSubmit").addEventListener("click", function(event) 
         }
     }
 })
+
+// Update stats and pause game when score display is opened
+document.getElementById("scoreBtn").addEventListener("click", function() {
+
+
+
+    gamePaused = true;
+});
+
+// Unpause game when modal is closed
+document.getElementById("modal-close").addEventListener("click", function() {
+    gamePaused = false;
+});
+
+
 
 
 function updateTimeDisplay(timeValue) {
@@ -460,8 +483,11 @@ function pretendITypedThis(string, element) {
     }, 75);
 }
 
-function sortIntoHighScores(num, array) {
-    // 
+function sortIntoHighScores() {
+    // This function runs through the high scores list until it finds a score that's smaller than the player's.  Then it inserts the player's score at that index and moves everything else down.
+
+
+    
 
 }
 
