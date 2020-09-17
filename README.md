@@ -14,13 +14,13 @@ Gameplay consists of 10 questions presented in a random order.  Answers are rand
 
 ### Score Tracking
 
-![scores](.Assets/scores-screenshot.png)
+![scores](./Assets/scores-screenshot.png)
 
 The list of high scores is available at any time via a button in the footer.  Opening the high scores list will pause the game until you close it.  Your position on the list is responsive to how your current score stacks up against the existing high scores.  Scores are saved in localStorage, so they persist across page reloads.
 
 ### Intelligent Game Over Screen
 
-![gameover](.Assets/gameover-screenshot.png)
+![gameover](./Assets/gameover-screenshot.png)
 
 The game over screen switches between telling you that you won or lost based on whether the game ended due to completing all questions or because you ran out of time.  You can submit your name to enter your score into the local list of high scores.  See if you can knock all those pesky QuizBots off the list!
 
